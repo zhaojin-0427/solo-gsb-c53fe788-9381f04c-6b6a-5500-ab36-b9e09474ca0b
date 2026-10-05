@@ -1,0 +1,17 @@
+services:
+  meeting-adjudicator:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - meeting-data:/data
+    environment:
+      DATABASE_PATH: /data/meeting.db
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  meeting-data:
