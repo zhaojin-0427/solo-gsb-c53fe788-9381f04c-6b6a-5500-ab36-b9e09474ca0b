@@ -1,0 +1,21 @@
+services:
+  meeting-api:
+    build: .
+    image: meeting-invite-adjudicator:latest
+    container_name: meeting-invite-api
+    ports:
+      - "8000:8000"
+    environment:
+      MEETING_DB_PATH: /data/meetings.db
+      MEETING_MAX_COUNT: "100000"
+    volumes:
+      - meeting-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  meeting-data:
